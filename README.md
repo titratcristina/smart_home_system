@@ -1,40 +1,40 @@
 # smart_home_system
 
 ## Descriere proiect 
-Un mic sistem automatizat pentru usurarea activitatilor casnice si securizarea locuintei.
+Un mic sistem automatizat pentru ușurarea activităților casnice și securizarea locuinței.
 
-Pentru partea de securizare si monitoarizare a temperaturii am folosit: 
-- doua placute NodeMCU cu modul WiFi, una este server web, iar cealalta reprezinta un client. 
-    - La prima placuta, care este un server web am adaugat: 
-        - un senzor de temperatura si umiditate DHT11
-        - un LCD 16x2 cu comunicare I2C
+Pentru partea de securizare și monitoarizare a temperaturii am folosit: 
+- două plăcuțe NodeMCU cu modul WiFi, una este server web, iar cealaltă reprezintă un client. 
+    - La prima plăcuță, care este un server web am adăugat: 
+        - un senzor de temperatură și umiditate DHT11
+        - un LCD 16x2 care se conectează prin I2C
         - un buzzer 
         - un servomotor
-    - Iar la placuta client am folosit:
+    - Iar la plăcuța client am folosit: 
         - un modul RFID 
-        - un senzor ultrasonic de distanta HC-SR04
-> Am vrut initial sa am o monitorizare web a temperaturii si a umiditatii cu o afisare a acestora pe LCD, dar pe parcurs am adaugat la placuta server buzzerul care avertizeaza cand cineva este in apropiere si servomotorul care tine locul unei incuietori electrice (senzorul HC-SR04 este conectat la placuta client care comunica cu serverul, accesand pagina care porneste "alarma"/activeaza buzzerul cand cineva se apropie si se efectueaza un joc pe LCD, acesta se stinge si se aprinde, iar servomotorul este activat cand cineva apropie un card care are acces)
+        - un senzor ultrasonic de distanță HC-SR04
+> Am vrut inițial să am o monitorizare web a temperaturii și a umidității cu o afișare a acestora pe LCD, dar pe parcurs am adăugat la plăcuța server buzzerul care avertizează când cineva este în apropiere și servomotorul care ține locul unei încuietori electrice (senzorul HC-SR04 este conectat la plăcuța client care comunica cu serverul, accesând pagina care pornește "alarmă"/activează buzzerul când cineva se apropie și se efectuează un joc pe LCD, acesta se stinge și se aprinde, iar servomotorul este activat când cineva apropie un card care are acces)
 
-Pentru partea automatizata de udat plantele am folosit:
-- o placuta Arduino Nano si una NodeMCU cu modul WiFi
-    - placuta Nano este conectata la:
+Pentru partea automatizată de udat plantele am folosit:
+- o plăcuță Arduino Nano si una NodeMCU cu modul WiFi
+    - plăcuța Nano este conectată la:
         - o pompa
         - un senzor de umiditate a solului
         - un releu 
-    - cealalta are doar senzorul de umiditate a solului
-> Am procedat in acest mod, din cauza ca nu am reusit sa pun tot proiectul pe NodeMCU (releul si wifi-ul consumau foarte mult) si am incarcat codul care porneste pompa cand umiditatea este scazuta pe Nano, iar interfata web am facut-o pe NodeMCU
+    - cealaltă are doar senzorul de umiditate a solului
+> Am procedat în acest mod, din cauză că nu am reușit să pun tot proiectul pe NodeMCU (releul si wifi-ul consumau foarte mult) și am încărcat codul care pornește pompa când umiditatea este scăzută pe Nano, iar interfața web am facut-o pe NodeMCU
 
 
-### Apasa pe imagini pentru a vedea videclipurile
+### Apasă pe imagini pentru a vedea videclipurile
 
 >Sistem automat de udarea a plantelor cu monitorizare online
 >[![N|Solid](https://i.imgur.com/Vhk8M5m.jpg)](https://www.youtube.com/watch?v=zv4vC909660)
 
->Sistem de securitate si informare sub forma unui termometru cu interfata web
+>Sistem de securitate și informare sub forma unui termometru cu interfață web
 >[![N|Solid](https://i.imgur.com/2ZBWQZN.jpg)](https://www.youtube.com/watch?v=UYCYDYaNyco)
 
 #### Structura folderelor
-> Fiecare folder contine codul sursa impreuna cu o diagrama a proiectului si o imagine a interfetei web       
+> Fiecare folder conține codul sursă împreună cu o diagramă a proiectului și o imagine a interfeței web 
 + client_distance_rfid
     * client_distance_rfid.ino
     * nodemcu_distance_rfid.jpg
@@ -52,6 +52,6 @@ Pentru partea automatizata de udat plantele am folosit:
 + webserver_soil
     * webserver_soil.ino
     * soil_moisture.jpg
-    ![](https://i.imgur.com/3t4hJoC.jpg)
+      ![](https://i.imgur.com/3t4hJoC.jpg)
     * soil.png
-    ![](https://i.imgur.com/gIIUktW.png)
+      ![](https://i.imgur.com/gIIUktW.png)
