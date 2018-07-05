@@ -17,6 +17,9 @@
 #define SS_PIN D2
 #define RST_PIN D1
 
+//pinul senzorului PIR
+#define PIR_PIN D8
+
 HTTPClient http;   //declararea obiectului pentru a apela funcționalitatea bibliotecii
 MFRC522 mfrc522(SS_PIN, RST_PIN);   //declararea obiectului cititor rfid
 
@@ -46,6 +49,8 @@ void setup () {
   
   pinMode(trigPin, OUTPUT); //setarea pinilor senzorului de distanta
   pinMode(echoPin, INPUT);
+  pinMode(PIR_PIN, INPUT); //setarea pinului PIR ca output
+
 }
  
 void loop() {
@@ -63,7 +68,7 @@ void loop() {
   Serial.println(" cm");
   delay(100);
   
-  if (WiFi.status() == WL_CONNECTED && distance < 100) { //verifica statusul conexiunii si daca distanta intre persoana si senzor e mai mica de 100cm
+  if (WiFi.status() == WL_CONNECTED && distance < 50 && digitalRead(PIR_PIN)) { //verifica statusul conexiunii, distanta intre persoana si senzor, verifica daca este un om
     http.begin("192.168.1.200",80,"/vinemonstrul"); //apelarea metodei "begin()" pentru a specifica URL-ul catre care se va face cererea HTTP
     http.GET(); // apelarea metodei "GET()" pentru trimiterea cererii care returneaza codul HTTP
     http.end(); // apelarea metodei "end()" pentru eliberarea resuselor

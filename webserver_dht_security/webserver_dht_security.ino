@@ -4,27 +4,24 @@
 #include <EasyDDNS.h> //biblioteca EasyDDNS este folosita pentru a mentine hostnameul actualizat cu IPul extern dinamic
 #include <LiquidCrystal_I2C.h> //biblioteca LCD ului care comunica prin I2C
 #include "DHTesp.h" //biblioteca senzorului de temperatura
-#include <Servo.h> //biblioteca servomotorului
 
 //configurarea variabilelor pentru conexiunea wifi
-#define ssid "my network name"
-#define password "my network password"
+#define ssid "ssid"
+#define password "pass"
 
 //declararea obiectelor globale pentru a le putea accesa ulterior
 LiquidCrystal_I2C lcd(0x3F, 16, 2);
 DHTesp dht;
 ESP8266WebServer server(80);
-Servo myservo;
 
 // configurarea pinilor si declararea variabilelor
 uint8_t degree[8] = {0x8,0xf4,0x8,0x43,0x4,0x4,0x43,0x0}; //caracterul pentru grade celsius
 float u,t;
-int servoPin = D8;
+int relayPin = D8;
 int dhtPin = D4;
 int buzzerPin = D5;
 int buzzerVCC = D6;
 int verificare = 1;
-int pos = 1400;
 
 void setup() {
   Serial.begin(9600);
@@ -42,20 +39,18 @@ void setup() {
   //configurarea pinilor buzzerului
   pinMode(buzzerPin, OUTPUT);
   pinMode(buzzerVCC, OUTPUT);
+  pinMode(relayPin, OUTPUT);
+  
   digitalWrite(buzzerVCC, LOW);
-
-  //configurarea motorasului
-  myservo.writeMicroseconds(pos);
-  myservo.attach(servoPin);
-  myservo.write(pos);
+  digitalWrite(relayPin, HIGH);
   
   Serial.print("Connecting to ");
   Serial.print(ssid);
 
   //configurarea wifiului
   WiFi.begin(ssid, password); //conectarea la wifi
-  IPAddress ip(192,168,1,200);
-  IPAddress gateway(192,168,1,1);
+  IPAddress ip(192,168,43,200);
+  IPAddress gateway(192,168,43,1);
   IPAddress subnet(225,225,225,0);
   WiFi.config(ip, gateway, subnet);
 
@@ -69,7 +64,8 @@ void setup() {
   server.begin(); //pornirea serverului 
   
   EasyDDNS.service("noip"); //declararea serviciului folosit
-  EasyDDNS.client("myhostname.ddns.net","my acount name","my acount password"); //Datele pentru login pe serviciul ddns si selectarea hostnameului pentru actualizare
+  EasyDDNS.client(".ddns.net","user","password"); //Datele pentru login pe serviciul ddns si selectarea hostnameului pentru actualizare
+  
 
   //cand are loc o cere HTTP catre una din aceste parti se va executa functia specifica 
   server.on("/temp", getTemp); //crearea unui API unde este afisata valoarea temperaturii
@@ -150,16 +146,10 @@ void alerta() {
 }
 
 void openDoor() {
-    pos = 2000;
-    myservo.writeMicroseconds(pos); //pornirea motorasului in sensul acelor de ceasornic
-    Serial.println("usa s-a deschis");
-    delay(100); 
-    pos = 1000;
-    myservo.writeMicroseconds(pos); //pornirea motorasului in sensul invers acelor de ceasornic
-    Serial.println("usa s-a inchis");
-    delay(100);
-    pos = 1400;
-    myservo.writeMicroseconds(pos); //oprirea motorasului (folosesc un motor cu rotatie continua care trebui oprit)
+  digitalWrite(relayPin, LOW);
+  delay(1500);
+  digitalWrite(relayPin, HIGH);
+  
 }
 
 void noapte() { //oprirea luminii LCD ului
@@ -197,15 +187,20 @@ void indexHtml() { //trimiterea continutului/html-ului care trebuie afisat de br
         <body>\
             <div class='container text-center'>\
                 <div class='row'>\
-                    <div class='col-md-6'>\
+                    <div class='col-md-4'>\
                         <h2>TEMPERATURA</h2>\
-                        <div class='alert ' role='alert' id='temp_s'></div>\
+                        <div class='alert' role='alert' id='temp_s'></div>\
                         <div id='gage1' class='gauge'></div>\
                     </div>\
-                    <div class='col-md-6'>\
+                    <div class='col-md-4'>\
                         <h2>UMIDITATE</h2>\
-                        <div class='alert ' role='alert' id='umid_s'></div>\
+                        <div class='alert' role='alert' id='umid_s'></div>\
                         <div id='gage2' class='gauge'></div>\
+                    </div>\
+                    <div class='col-md-4'>\
+                        <h2>PLANTUTA</h2>\
+                        <div class='alert' role='alert' id='plantuta'></div>\
+                        <div id='gage3' class='gauge'></div>\
                     </div>\
                </div>\
                <div class='row'>\
@@ -219,6 +214,6 @@ void indexHtml() { //trimiterea continutului/html-ului care trebuie afisat de br
            </div>\
           <script src='https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js' integrity='sha256-67By+NpOtm9ka1R6xpUefeGOY8kWWHHRAKlvaTJ7ONI=' crossorigin='anonymous'></script>\
           <script src='https://cdnjs.cloudflare.com/ajax/libs/justgage/1.2.9/justgage.min.js' integrity='sha256-nL2oTVCXGFtdu+pxt8QkObEXDFh0CVRkwLPIy04s8z0=' crossorigin='anonymous'></script>\
-          <script src='https://rawgit.com/titratcristina/IoT_thermometer/7d114ea429b28b98668c5ab2f240cca5bb05fdd7/script.js'></script>\
+          <script src='https://cdn.rawgit.com/titratcristina/IoT/7409f77d/script.js'></script>\
      </body>\
   </html>");}
