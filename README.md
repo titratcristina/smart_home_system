@@ -9,21 +9,36 @@ Pentru partea de securizare și monitoarizare a temperaturii am folosit:
         - un senzor de temperatură și umiditate DHT11
         - un LCD 16x2 care se conectează prin I2C
         - un buzzer 
-        - un servomotor
+        - o încuietoare electromagnetică 12V
     - Iar la plăcuța client am folosit: 
         - un modul RFID 
+        - un senzor PIR
         - un senzor ultrasonic de distanță HC-SR04
 > Am vrut inițial să am o monitorizare web a temperaturii și a umidității cu o afișare a acestora pe LCD, dar pe parcurs am adăugat la plăcuța server buzzerul care avertizează când cineva este în apropiere și servomotorul care ține locul unei încuietori electrice (senzorul HC-SR04 este conectat la plăcuța client care comunica cu serverul, accesând pagina care pornește "alarmă"/activează buzzerul când cineva se apropie și se efectuează un joc pe LCD, acesta se stinge și se aprinde, iar servomotorul este activat când cineva apropie un card care are acces)
 
-Pentru partea automatizată de udat plantele am folosit:
-- o plăcuță Arduino Nano si una NodeMCU cu modul WiFi
-    - plăcuța Nano este conectată la:
-        - o pompa
-        - un senzor de umiditate a solului
-        - un releu 
-    - cealaltă are doar senzorul de umiditate a solului
-> Am procedat în acest mod, din cauză că nu am reușit să pun tot proiectul pe NodeMCU (releul si wifi-ul consumau foarte mult) și am încărcat codul care pornește pompa când umiditatea este scăzută pe Nano, iar interfața web am facut-o pe NodeMCU
 
+Pentru partea automatizată de udat plantele am folosit:
+- O plăcuță NodeMCU cu modul WiFi conectată la:
+    - o pompa
+    - un senzor de umiditate a solului
+    - un releu 
+> Declanșarea operațiunii de udare a plantelor se face automat la scăderea umidității din sol, iar verificarea nivelului de umiditate se poate face pe web, pe pagina principală a proiectului unde se află și indicațiile de temperatură și umiditate, dar și individual accesând pagina web de pe IP-ul plăcuței ce formează acest modul.
+
+#### Structura folderelor
+> Fiecare folder conține codul sursă împreună cu o diagramă a proiectului și o imagine a interfeței web 
++ client_distance_rfid
+    * client_distance_rfid.ino
+    * client_rfid_diagram.png
+    * client_distance_rfid.jpg
++ watering_system
+    * watering_system.ino
+    * watering_system.jpg
+    * watering_system_diagram.png
++ webserver_dht_security
+    * thermometer_security.ino
+    * thermometer_security.jpg
+    * thermometer.jpg
+    * webpage.jpg
 
 ### Apasă pe imagini pentru a vedea videclipurile
 
@@ -32,26 +47,3 @@ Pentru partea automatizată de udat plantele am folosit:
 
 >Sistem de securitate și informare sub forma unui termometru cu interfață web
 >[![N|Solid](https://i.imgur.com/2ZBWQZN.jpg)](https://www.youtube.com/watch?v=UYCYDYaNyco)
-
-#### Structura folderelor
-> Fiecare folder conține codul sursă împreună cu o diagramă a proiectului și o imagine a interfeței web 
-+ client_distance_rfid
-    * client_distance_rfid.ino
-    * nodemcu_distance_rfid.jpg
-      ![](https://i.imgur.com/dD732ap.jpg)
-+ watering_system
-    * watering_system.ino
-    * water_pump.jpg
-      ![](https://i.imgur.com/ZqSDQRj.jpg)
-+ webserver_dht_security
-    * webserver_dht_security.ino
-    * thermometer.jpg
-      ![](https://i.imgur.com/v5MkN85.jpg)
-    * webpage.jpg
-      ![](https://i.imgur.com/FS52cH7.jpg)
-+ webserver_soil
-    * webserver_soil.ino
-    * soil_moisture.jpg
-      ![](https://i.imgur.com/3t4hJoC.jpg)
-    * soil.png
-      ![](https://i.imgur.com/gIIUktW.png)
